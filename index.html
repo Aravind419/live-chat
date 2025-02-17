@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enhanced Timetable Alert System</title>
-  <!-- <style>
+  <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
@@ -36,7 +36,7 @@
   <div id="log">
     <h3>Activity Log</h3>
     <div id="activity-log"></div>
-  </div> -->
+  </div>
 
   <script>
     // Sample Timetable Data (Starting at 6:59 PM, 45-minute intervals)
@@ -69,13 +69,13 @@
     }
 
     // Display Logs from Local Storage
-    // function updateLogDisplay() {
-     // console.log("Updating log display");
-      //const logs = JSON.parse(localStorage.getItem("activityLog")) || [];
-      //const logContainer = document.getElementById("activity-log");
-      //logContainer.innerHTML = logs
-      //  .map((log) => `<div class="log-item">${log}</div>`)
-     //   .join("");
+     function updateLogDisplay() {
+      console.log("Updating log display");
+      const logs = JSON.parse(localStorage.getItem("activityLog")) || [];
+      const logContainer = document.getElementById("activity-log");
+      logContainer.innerHTML = logs
+        .map((log) => `<div class="log-item">${log}</div>`)
+       .join("");
     //} 
 
     // Show System-Wide Notifications with Sound
@@ -137,7 +137,7 @@
     // Initialize and Start the Timer
     window.onload = function () {
       console.log("Initializing Enhanced Timetable Alert System");
-      //updateLogDisplay(); // Load logs from localStorage
+      updateLogDisplay(); // Load logs from localStorage
       setInterval(checkTimetable, 60000); // Check every minute
     };
   </script>
