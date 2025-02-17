@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Timetable Alert System</title>
+  <!-- <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    #log {
+      margin-top: 20px;
+      padding: 10px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .log-item {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Enhanced Timetable Alert System</h1>
+  <div id="log">
+    <h3>Activity Log</h3>
+    <div id="activity-log"></div>
+  </div> -->
+
+  <script>
+    // Sample Timetable Data (Starting at 6:59 PM, 45-minute intervals)
+    const timetable = [
+      { period: 1, start: "19:03", end: "19:44" },
+      { period: 2, start: "19:44", end: "19:59" },
+      { period: 3, start: "20:06", end: "20:11" },
+      { period: 4, start: "20:20", end: "20:22" },
+      { period: 5, start: "20:39", end: "20:44" },
+      { period: 6, start: "22:44", end: "23:29" },
+      { period: 7, start: "23:29", end: "00:14" },
+      { period: 8, start: "00:14", end: "00:59" },
+    ];
+
+    // Utility Function: Get Current Time
+    function getCurrentTime() {
+      const now = new Date();
+      const timeString = now.getHours() + ":" + String(now.getMinutes()).padStart(2, "0");
+      console.log(`Current Time: ${timeString}`);
+      return timeString;
+    }
+
+    // Utility Function: Save Logs in Local Storage
+    function saveLog(message) {
+      console.log(`Saving log: ${message}`);
+      const logs = JSON.parse(localStorage.getItem("activityLog")) || [];
+      logs.push(message);
+      localStorage.setItem("activityLog", JSON.stringify(logs));
+      updateLogDisplay();
+    }
+
+    // Display Logs from Local Storage
+    // function updateLogDisplay() {
+     // console.log("Updating log display");
+      //const logs = JSON.parse(localStorage.getItem("activityLog")) || [];
+      //const logContainer = document.getElementById("activity-log");
+      //logContainer.innerHTML = logs
+      //  .map((log) => `<div class="log-item">${log}</div>`)
+     //   .join("");
+    //} 
+
+    // Show System-Wide Notifications with Sound
+    function showNotification(title, body) {
+      console.log(`Showing notification: ${title} - ${body}`);
+      if (Notification.permission === "granted") {
+        const options = {
+          body: body,
+          icon: "https://via.placeholder.com/100", // Replace with a custom icon URL
+          requireInteraction: true, // Keeps notification visible until dismissed
+        };
+        const notification = new Notification(title, options);
+
+        // Play random sound
+        const sounds = [
+          "song.m4a",
+         
+        ];
+        const randomSound = new Audio(sounds[Math.floor(Math.random() * sounds.length)]);
+        randomSound.play();
+
+        // Auto-close notification after 5 seconds
+        setTimeout(() => {
+          notification.close();
+        }, 10000);
+      } else {
+        console.warn("Notification permission not granted");
+      }
+    }
+
+    // Alert Logic
+    function checkTimetable() {
+      const currentTime = getCurrentTime();
+      timetable.forEach(({ period, start, end }) => {
+        if (currentTime === start) {
+          const message = `Period ${period} is starting now!`;
+          console.log(message);
+          showNotification(`Period ${period} Start`, message);
+          saveLog(message);
+        } else if (currentTime === end) {
+          const message = `Period ${period} has ended.`;
+          console.log(message);
+          showNotification(`Period ${period} End`, message);
+          saveLog(message);
+        }
+      });
+    }
+
+    // Request Notification Permission
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission().then((permission) => {
+        console.log(`Notification permission: ${permission}`);
+        if (permission !== "granted") {
+          alert("Please enable notifications for this feature to work.");
+        }
+      });
+    }
+
+    // Initialize and Start the Timer
+    window.onload = function () {
+      console.log("Initializing Enhanced Timetable Alert System");
+      //updateLogDisplay(); // Load logs from localStorage
+      setInterval(checkTimetable, 60000); // Check every minute
+    };
+  </script>
+</body>
+</html>
